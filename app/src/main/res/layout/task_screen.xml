@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout= "@layout/task_screen">
+
+    <ImageView
+        android:id="@+id/Image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/task" />
+
+    <EditText
+        android:id="@+id/Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="@+id/Image"
+        app:layout_constraintStart_toStartOf="@+id/Image"
+        app:layout_constraintTop_toBottomOf="@+id/Image" />
+
+    <EditText
+        android:id="@+id/Description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="Description"
+        app:layout_constraintEnd_toEndOf="@+id/Title"
+        app:layout_constraintStart_toStartOf="@+id/Title"
+        app:layout_constraintTop_toBottomOf="@+id/Title" />
+
+    <TextView
+        android:id="@+id/textViewStart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        app:layout_constraintEnd_toStartOf="@+id/textViewFinish"
+        app:layout_constraintStart_toStartOf="@+id/Description"
+        app:layout_constraintTop_toBottomOf="@+id/Description" />
+
+    <TextView
+        android:id="@+id/textViewFinish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Finish"
+        app:layout_constraintEnd_toEndOf="@+id/Description"
+        app:layout_constraintStart_toEndOf="@+id/textViewStart"
+        app:layout_constraintTop_toBottomOf="@+id/Description" />
+
+    <Spinner
+        android:id="@+id/SpinnerStart"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:entries="@array/horas"
+        app:layout_constraintEnd_toEndOf="@+id/textViewStart"
+        app:layout_constraintStart_toStartOf="@+id/textViewStart"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStart" />
+
+    <Spinner
+        android:id="@+id/SpinnerFinish"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/horas"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/textViewFinish"
+        app:layout_constraintStart_toEndOf="@+id/SpinnerStart"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFinish" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Status"
+        app:layout_constraintStart_toStartOf="@+id/SpinnerStart"
+        app:layout_constraintTop_toBottomOf="@+id/SpinnerStart" />
+
+    <CheckBox
+        android:id="@+id/cb_pending"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Pending"
+        app:layout_constraintStart_toStartOf="@+id/textViewStatus"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStatus" />
+
+    <CheckBox
+        android:id="@+id/cb_inProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="In progress"
+        app:layout_constraintStart_toStartOf="@+id/cb_pending"
+        app:layout_constraintTop_toBottomOf="@+id/cb_pending" />
+
+    <CheckBox
+        android:id="@+id/cb_completed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Completed"
+        app:layout_constraintStart_toStartOf="@+id/cb_inProgress"
+        app:layout_constraintTop_toBottomOf="@+id/cb_inProgress" />
+
+    <Button
+        android:id="@+id/btSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_completed" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

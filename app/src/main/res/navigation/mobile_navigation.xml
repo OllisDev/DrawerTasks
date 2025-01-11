@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_tasks">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="es.ejemplo.android.drawtasks.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="es.ejemplo.android.drawtasks.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="es.ejemplo.android.drawtasks.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tasks"
+        android:name="es.ejemplo.android.drawtasks.view.MainScreen"
+        android:label="Main Screen"
+        tools:layout="@layout/main_screen">
+        <action
+            android:id="@+id/action_nav_tasks_to_nav_createTasks"
+            app:destination="@id/nav_createTasks" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_createTasks"
+        android:name="es.ejemplo.android.drawtasks.view.TaskScreen"
+        android:label="Task Details"
+        tools:layout="@layout/task_screen">
+    </fragment>
+
+</navigation>
