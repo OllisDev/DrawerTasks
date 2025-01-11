@@ -60,8 +60,6 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
             }
         }
 
-
-
         task?.let {
             ActualTask = it
             binding.Title.setText(it.title)
@@ -89,6 +87,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
         }
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

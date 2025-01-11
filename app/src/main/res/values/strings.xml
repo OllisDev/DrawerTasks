@@ -16,4 +16,10 @@
     <string name = "SaveData">Save Data</string>
     <string name = "AskSaveData">Do you want to save data?</string>
     <string name = "dataSaved"> Data has been saved</string>
+    <string-array name="filter_options">
+        <item>All</item>
+        <item>Pending</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+    </string-array>
 </resources>

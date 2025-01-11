@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,7 +20,6 @@ import es.ejemplo.android.drawtasks.viewmodel.TaskViewModel
 
 class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
     private var removeTask: Task? // Almacenamiento de la tarea para poder eliminarlo cuando lo seleccionamos
-
     private var tasksAdapter: TasksAdapter? = null
     lateinit var taskViewModel: TaskViewModel
 
@@ -49,12 +51,49 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         )
         binding.TasksRecyclerView.adapter = tasksAdapter
 
-        taskViewModel.task.observe(viewLifecycleOwner) { tasklist ->
-            tasksAdapter?.taskList = tasklist
-            tasksAdapter?.notifyDataSetChanged()
+
+
+        val spinnerAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.filter_options,
+            android.R.layout.simple_spinner_item
+        )
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.FilterSpinner.adapter = spinnerAdapter
+
+        binding.FilterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                applyFilter(position) // Aplicar el filtro según la opción seleccionada
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        taskViewModel.task.observe(viewLifecycleOwner) { tasklist ->
+            tasksAdapter?.updateFilteredList(tasklist)
+
+        }
+
         return binding.root
     }
+
+    private fun applyFilter(position: Int) {
+        val filteredTask = when (position) {
+            0 -> taskViewModel.task.value
+            1 -> taskViewModel.task.value?.filter { it.pending } // Filtrar pendientes
+            2 -> taskViewModel.task.value?.filter { it.inProgress } // Filtrar en progreso
+            3 -> taskViewModel.task.value?.filter { it.completed } // Filtrar completadas
+            else -> taskViewModel.task.value // Default: Mostrar todas
+        }
+
+        filteredTask?.let{
+            tasksAdapter?.updateFilteredList(it)
+        }
+    }
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -62,7 +101,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
     }
 
     private fun clicked(task: Task, v: View) {
-        val bundle = bundleOf("task" to task)
+        val bundle = bundleOf("task" to  task)
         v.findNavController().navigate(R.id.action_nav_tasks_to_nav_createTasks, bundle)
     }
 

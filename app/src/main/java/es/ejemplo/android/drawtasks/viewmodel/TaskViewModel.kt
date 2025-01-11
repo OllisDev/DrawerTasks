@@ -38,5 +38,4 @@ class TaskViewModel : ViewModel() {
             _task.value = taskList // Notificamos el cambio a los observadores
         }
     }
-
 }
