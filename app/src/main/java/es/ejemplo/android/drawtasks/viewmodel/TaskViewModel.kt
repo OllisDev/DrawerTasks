@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import es.ejemplo.android.drawtasks.model.Task
 
+// TaskViewModel -> Actualizamos la lista de tareas (LiveData) según la acción que apliquemos (crear, obtener, eliminar o actualizar)
 class TaskViewModel : ViewModel() {
     private val _task = MutableLiveData<MutableList<Task>>(mutableListOf())
     val task: LiveData<MutableList<Task>> get() =_task

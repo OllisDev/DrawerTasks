@@ -18,10 +18,12 @@ import es.ejemplo.android.drawtasks.databinding.MainScreenBinding
 import es.ejemplo.android.drawtasks.model.Task
 import es.ejemplo.android.drawtasks.viewmodel.TaskViewModel
 
+// MainScreen -> fragmento que almacenaremos todos los CardViews de las tareas creadas del TaskScreen
+
 class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
     private var removeTask: Task? // Almacenamiento de la tarea para poder eliminarlo cuando lo seleccionamos
-    private var tasksAdapter: TasksAdapter? = null
-    lateinit var taskViewModel: TaskViewModel
+    private var tasksAdapter: TasksAdapter? = null // Almacenar e inicializar instancia de la clase TaskAdapter
+    lateinit var taskViewModel: TaskViewModel // Almacenar e inicializar instancia del ViewModel
 
 
 
@@ -42,7 +44,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         _binding = MainScreenBinding.inflate(inflater, container, false)
         // Configuración del RecyclerView y mostrar lista de tareas
         binding.TasksRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        binding.TasksRecyclerView.setHasFixedSize(true)
+        binding.TasksRecyclerView.setHasFixedSize(true) // Ajustamos el tamaño del RecyclerView del layout
         val taskList = mutableListOf<Task>()
         tasksAdapter = TasksAdapter(
             taskList,
@@ -52,7 +54,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         binding.TasksRecyclerView.adapter = tasksAdapter
 
 
-
+        // Almacenamos en una variable el Spinner de filtrar según el estado de la tarea mediante el almacenamiento de un string array en la carpeta de String
         val spinnerAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.filter_options,
@@ -68,7 +70,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
+        // Actualizamos con observe la lista filtrada de tareas segun el estado de la tarea
         taskViewModel.task.observe(viewLifecycleOwner) { tasklist ->
             tasksAdapter?.updateFilteredList(tasklist)
 
@@ -77,6 +79,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         return binding.root
     }
 
+    // Metodo para aplicar los filtros mediante el Spinner según el estado de la tarea (pending, inProgess, completed)
     private fun applyFilter(position: Int) {
         val filteredTask = when (position) {
             0 -> taskViewModel.task.value
@@ -87,7 +90,7 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         }
 
         filteredTask?.let{
-            tasksAdapter?.updateFilteredList(it)
+            tasksAdapter?.updateFilteredList(it) // Llamamos al metodo updateFilteredList de la clase TasksAdapter para poder recorrer la lista y aplicar la actualizacion de la lista de tareas
         }
     }
 
@@ -100,27 +103,30 @@ class MainScreen : Fragment(R.layout.main_screen), Dialog.OkOrCancel {
         _binding = null
     }
 
+    // Método que al hacer un click, abre el TaskScreen para poder modificar la tarea creada
     private fun clicked(task: Task, v: View) {
-        val bundle = bundleOf("task" to  task)
-        v.findNavController().navigate(R.id.action_nav_tasks_to_nav_createTasks, bundle)
+        val bundle = bundleOf("task" to  task) // bundleOf -> permite generar la tarea para pasar del MainScreen al TaskScreen mediante clave-valor
+        v.findNavController().navigate(R.id.action_nav_tasks_to_nav_createTasks, bundle) // La vista se encargará de pasar del MainScreen al TaskScreen mediante el almacenamiento de la funcionalidad proporcionada del mobile_navigation.xnl
     }
 
-
+    // Método que al mantener el click, abre un dialog que nos dirá si queremos eliminar o no la tarea seleccionada
     private fun clickedLong(task: Task, v: View): Boolean {
-        removeTask = task
+        removeTask = task // Guardamos en la variable removeTask la tarea que hemos seleccionado
 
-        val dialog = Dialog(resources.getString(R.string.deletePark), resources.getString(R.string.askDeletePark) + task.title + "?", this)
-        dialog.show(requireActivity().supportFragmentManager, "Dialog")
+        val dialog = Dialog(resources.getString(R.string.deletePark), resources.getString(R.string.askDeletePark) + " " + task.title + "?", this) // Llamamos a la clase Dialog para aplicar la frase de eliminar el parque a la hora de que nos abra el dialogo y concatenamos el titulo de la tarea seleccionada
+        dialog.show(requireActivity().supportFragmentManager, "Dialog") // Mostramos el dialogo
         return true
     }
 
-
+    // Metodo de la interfaz guardada en la clase del dialogo para que implemente que cuando pulse Aceptar elimine la tarea seleccionada
     override fun onPositiveClick() {
+        // Elimina la tarea a través de llamar el método removeTask de la clase TaskViewModel
         removeTask?.let { task ->
             taskViewModel.removeTask(task)
         }
     }
 
+    // Método de la interfaz guardada en la clase del dialogo para que implemente que cuando pulse Cancelar salga un mensaje emergente (Toast) de la accion ha sido cancelada y no elimine la tarea
     override fun onNegativeClick() {
         Toast.makeText(requireActivity().applicationContext, resources.getString(R.string.actionCancelled), Toast.LENGTH_SHORT).show()
     }

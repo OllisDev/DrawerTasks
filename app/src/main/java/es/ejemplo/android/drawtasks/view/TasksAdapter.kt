@@ -26,10 +26,12 @@ class TasksAdapter(var taskList: MutableList<Task>, val click: (Task, View) -> U
 
     override fun getItemCount(): Int = taskList.size
 
+    // Metodo para actualizar la lista según el filtro del Spinner (pending, inProgress, completed)
     fun updateFilteredList(filteredTasks: List<Task>) {
+        // Limpiamos la lista de tareas y aplicacmos el filtro para mostrar toda la lista de tareas filtradas dependiendo de que estado queremos
         taskList.clear()
         taskList.addAll(filteredTasks)
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Notificamos que la lista se ha actualizado
     }
 
     

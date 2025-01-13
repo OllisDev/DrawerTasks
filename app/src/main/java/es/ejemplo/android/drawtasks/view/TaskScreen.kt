@@ -14,14 +14,15 @@ import es.ejemplo.android.drawtasks.databinding.TaskScreenBinding
 import es.ejemplo.android.drawtasks.model.Task
 import es.ejemplo.android.drawtasks.viewmodel.TaskViewModel
 
+// TaskScreen -> fragmento que nos servirá para crear y/o modificar una tarea
 class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
-    private var tasksAdapter: TasksAdapter? = null
-    private var taskViewModel: TaskViewModel? = null
+    private var tasksAdapter: TasksAdapter? = null // Almacenamos e inicializamos la clase TasksAdapter
+    private var taskViewModel: TaskViewModel? = null // Almacenamos e inicializamos la clase TaskViewModel
     var _binding:TaskScreenBinding? = null
 
     private val binding get() = _binding!!
 
-    private var ActualTask: Task?
+    private var ActualTask: Task? // Almacenamos e incializamos la tarea seleccionada actualmente
 
     init {
         ActualTask = null
@@ -37,8 +38,9 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
 
         val task: Task? = arguments?.getSerializable("task") as Task?
 
-        binding.Image.setImageResource(R.drawable.task)
+        binding.Image.setImageResource(R.drawable.task) // Cargamos la imagen
 
+        // Verificamos que cuando se pulse un CheckBox no se pueda pulsar otro, es decir, comprobamos que solo un Checkbox se seleccione
         binding.cbPending.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 binding.cbInProgress.isChecked = false
@@ -60,6 +62,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
             }
         }
 
+        // Actualizamos todos los componentes del TaskScreen
         task?.let {
             ActualTask = it
             binding.Title.setText(it.title)
@@ -81,6 +84,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
             if (it.completed ?: false) binding.cbCompleted.isChecked = true
         }
 
+        // Cuando pulsemos el boton de guardar, aparecerá de nuevo el dialogo, pero ahora nos preguntará si queremos guardar la lista
         binding.btSave.setOnClickListener {
             val dialog = Dialog(resources.getString(R.string.SaveData), resources.getString(R.string.AskSaveData), this)
             dialog.show(requireActivity().supportFragmentManager, "Dialog")
@@ -94,6 +98,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
         _binding = null
     }
 
+    // Método para almacenar en un string-array en la carpeta String en los Spinners las horas
     private fun populateSpinner() {
         ArrayAdapter.createFromResource(requireActivity(), R.array.horas, android.R.layout.simple_spinner_dropdown_item).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
@@ -101,7 +106,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
         }
     }
 
-
+    // A partir de que aceptemos crear la tarea, actualizamos todos los campos para crear la tarea
     override fun onPositiveClick() {
         val updatedTask = Task (
             binding.Title.text.toString(),
@@ -114,6 +119,7 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
             R.drawable.task
         )
 
+        // Comprobamos que la tarea seleccionada exista y lo actualizamos, sino existe, creamos una nueva tareaa
         if (ActualTask != null) {
             taskViewModel?.updateTask(ActualTask!!, updatedTask)
         } else {
@@ -125,11 +131,14 @@ class TaskScreen : Fragment(R.layout.task_screen), Dialog.OkOrCancel {
             tasksAdapter?.notifyDataSetChanged()
         }
 
+        // Actualizamos la tarea seleccionada y realizamos una copia de la tarea nueva para tratar de que sea una modificación
         ActualTask = updatedTask.copy()
 
+        // Mostramos que los datos se han guardado mediante un SnackBar
         Snackbar.make(binding.root, resources.getString(R.string.dataSaved), Snackbar.LENGTH_LONG)
     }
 
+    // A partir de que cancelemos crear la tarea, mostramos un mensaje emergente de que la acción ha sido cancelada mediante un Toast
     override fun onNegativeClick() {
         Toast.makeText(requireActivity().applicationContext, resources.getString(R.string.actionCancelled), Toast.LENGTH_SHORT)
     }
